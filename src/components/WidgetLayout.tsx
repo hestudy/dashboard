@@ -21,6 +21,8 @@ const WidgetLayout = () => {
         rowHeight={30}
         isResizable={!readonly}
         isDraggable={!readonly}
+        margin={readonly ? [5, 5] : [10, 10]}
+        draggableCancel=".un-draggable"
       >
         {layout.map((item) => (
           <div key={item.i} data-grid={item}>

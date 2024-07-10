@@ -9,8 +9,13 @@ export const useLayout = () => {
     setLayout((layout) => [...layout, v]);
   };
 
+  const removeLayout = (i: string) => {
+    setLayout((layout) => layout.filter((item) => item.i !== i));
+  };
+
   return {
     layout,
     addLayout,
+    removeLayout,
   };
 };
