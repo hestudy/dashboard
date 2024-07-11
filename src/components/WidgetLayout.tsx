@@ -26,6 +26,9 @@ const WidgetLayout = () => {
         onDragStop={(v) => {
           saveLayout(v);
         }}
+        onResizeStop={(v) => {
+          saveLayout(v);
+        }}
       >
         {layout.map((item) => (
           <div key={item.i} data-grid={item}>
