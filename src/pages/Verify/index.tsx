@@ -1,25 +1,32 @@
 import FullCenter from "@/components/FullCenter";
 import FullLoading from "@/components/FullLoading";
+import { useUser } from "@/hooks/useUser";
 import { supabase } from "@/lib/supabase";
 import { useRequest } from "ahooks";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Verify = () => {
   const navigate = useNavigate();
+  const { user, runAsync } = useUser();
 
   const { loading } = useRequest(async () => {
     if (location.hash) {
-      const res = await supabase.getInstance().auth.verifyOtp({
+      await supabase.getInstance().auth.verifyOtp({
         token_hash: location.hash,
         type: "email",
       });
-      if (!res.error) {
-        navigate("/", {
-          replace: true,
-        });
-      }
+      await runAsync(true);
     }
   });
+
+  useEffect(() => {
+    if (user?.id) {
+      navigate("/", {
+        replace: true,
+      });
+    }
+  }, [user]);
 
   if (!location.hash) {
     return <FullCenter>Invalid verification link</FullCenter>;

@@ -6,8 +6,8 @@ import { useAtom } from "jotai";
 export const useUser = () => {
   const [user, setUser] = useAtom(userAtom);
 
-  const userRes = useRequest(async () => {
-    if (user) {
+  const userRes = useRequest(async (refresh?: boolean) => {
+    if (user && !refresh) {
       return user;
     }
     const res = await supabase.getInstance().auth.getUser();
