@@ -36,9 +36,7 @@ const Login = () => {
         const res = await supabase.getInstance().auth.signInWithOtp({
           email: form.getValues("email"),
           options: {
-            emailRedirectTo: import.meta.env.DEV
-              ? "http://localhost:5173/verify"
-              : "https://dash.hestudy.cn/verify",
+            emailRedirectTo: `${import.meta.env.VITE_SITE_URL}/verify`,
           },
         });
         if (res.error) {
