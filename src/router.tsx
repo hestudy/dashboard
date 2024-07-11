@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import AppLayout from "./layouts/AppLayout";
+import AuthLayout from "./layouts/AuthLayout";
 
 export const router: ReturnType<typeof createBrowserRouter> =
   createBrowserRouter([
@@ -9,8 +10,13 @@ export const router: ReturnType<typeof createBrowserRouter> =
       element: <AppLayout></AppLayout>,
       children: [
         {
-          index: true,
-          element: <Home></Home>,
+          element: <AuthLayout></AuthLayout>,
+          children: [
+            {
+              index: true,
+              element: <Home></Home>,
+            },
+          ],
         },
       ],
     },
