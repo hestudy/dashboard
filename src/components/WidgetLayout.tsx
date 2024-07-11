@@ -1,11 +1,11 @@
 import { useLayout } from "@/hooks/useLayout";
+import { useReadonly } from "@/hooks/useReadonly";
 import { useSize } from "ahooks";
 import { useRef } from "react";
 import ReactGridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import WidgetRender from "./WidgetRender";
-import { useReadonly } from "@/hooks/useReadonly";
 
 const WidgetLayout = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -23,8 +23,8 @@ const WidgetLayout = () => {
         isDraggable={!readonly}
         margin={readonly ? [5, 5] : [10, 10]}
         draggableCancel=".un-draggable"
-        onLayoutChange={(layout) => {
-          saveLayout(layout);
+        onDragStop={(v) => {
+          saveLayout(v);
         }}
       >
         {layout.map((item) => (
