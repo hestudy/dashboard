@@ -16,7 +16,7 @@ const WidgetRender = ({ data }: { data: ReactGridLayout.Layout }) => {
     <div className="w-full h-full px-4 pb-4 bg-white/30 backdrop-blur rounded flex flex-col">
       <div className="flex py-2 justify-between">
         <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-          {widgetData.title}
+          {widgetData?.title}
         </h4>
         {!readonly && (
           <div className="flex items-center space-x-2">
@@ -30,7 +30,7 @@ const WidgetRender = ({ data }: { data: ReactGridLayout.Layout }) => {
         )}
       </div>
       <div className="flex-1 h-0">
-        {widgetData.widget === "iframe" && (
+        {widgetData?.widget === "iframe" && (
           <iframe
             className="w-full h-full rounded"
             src={widgetData.url}

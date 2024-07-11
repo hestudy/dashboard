@@ -30,7 +30,7 @@ const Login = () => {
     mode: "onChange",
   });
 
-  const { run, loading, data } = useRequest(
+  const { run, loading } = useRequest(
     async () => {
       if (await form.trigger()) {
         const res = await supabase.getInstance().auth.signInWithOtp({
@@ -87,7 +87,7 @@ const Login = () => {
           </Form>
         </CardContent>
         <CardFooter className="flex justify-end">
-          <Button loading={loading} onClick={run} disabled={!!data}>
+          <Button loading={loading} onClick={run}>
             Log in
           </Button>
         </CardFooter>

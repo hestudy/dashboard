@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "./pages/Home";
 import AppLayout from "./layouts/AppLayout";
 import AuthLayout from "./layouts/AuthLayout";
+import Home from "./pages/Home";
+import Verify from "./pages/Verify";
 
 export const router: ReturnType<typeof createBrowserRouter> =
   createBrowserRouter([
@@ -17,6 +18,10 @@ export const router: ReturnType<typeof createBrowserRouter> =
               element: <Home></Home>,
             },
           ],
+        },
+        {
+          path: "verify",
+          element: <Verify></Verify>,
         },
       ],
     },

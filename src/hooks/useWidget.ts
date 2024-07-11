@@ -1,8 +1,10 @@
 import { widgetAtom } from "@/atoms/widgetAtom";
+import { supabase } from "@/lib/supabase";
+import { useRequest } from "ahooks";
 import { useAtom } from "jotai";
 
 export const useWidget = () => {
-  const [idWidget, setIdWidget] = useAtom(widgetAtom);
+  const [widget, setWidget] = useAtom(widgetAtom);
 
   const addIdWidget = (
     id: string,
@@ -11,15 +13,42 @@ export const useWidget = () => {
       widget: string;
     }
   ) => {
-    setIdWidget((idWidget) => ({ ...idWidget, [id]: widget }));
+    insertWidget(id, widget);
+    setWidget((idWidget) => ({ ...idWidget, [id]: widget }));
   };
 
   const findWidget = (id: string) => {
-    return idWidget[id];
+    return widget[id];
   };
 
+  useRequest(async () => {
+    const res = await supabase.getInstance().from("widget").select("*");
+    if (!res.error) {
+      const widget: any = {};
+      res.data.map((item) => {
+        widget[item.i!] = JSON.parse(item.data?.toString() || "");
+      });
+      setWidget(widget);
+    }
+  });
+
+  const { run: insertWidget } = useRequest(
+    async (id: string, data: any) => {
+      await supabase
+        .getInstance()
+        .from("widget")
+        .insert({
+          i: id,
+          data: JSON.stringify(data),
+        });
+    },
+    {
+      manual: true,
+    }
+  );
+
   return {
-    idWidget,
+    idWidget: widget,
     addIdWidget,
     findWidget,
   };

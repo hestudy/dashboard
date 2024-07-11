@@ -10,7 +10,7 @@ import { useReadonly } from "@/hooks/useReadonly";
 const WidgetLayout = () => {
   const ref = useRef<HTMLDivElement>(null);
   const size = useSize(ref);
-  const { layout } = useLayout();
+  const { layout, saveLayout } = useLayout();
   const { readonly } = useReadonly();
 
   return (
@@ -23,6 +23,9 @@ const WidgetLayout = () => {
         isDraggable={!readonly}
         margin={readonly ? [5, 5] : [10, 10]}
         draggableCancel=".un-draggable"
+        onLayoutChange={(layout) => {
+          saveLayout(layout);
+        }}
       >
         {layout.map((item) => (
           <div key={item.i} data-grid={item}>
