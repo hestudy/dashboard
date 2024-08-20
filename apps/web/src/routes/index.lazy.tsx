@@ -1,5 +1,4 @@
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import $api from "../lib/client";
 
 export const Route = createLazyFileRoute("/")({
@@ -7,7 +6,6 @@ export const Route = createLazyFileRoute("/")({
 });
 
 const Index = () => {
-  const navigate = useNavigate()
   const { error, isLoading } = $api.useQuery(
     "get",
     "/api/auth/profile",
@@ -17,12 +15,6 @@ const Index = () => {
       refetchOnWindowFocus: false,
     }
   );
-
-  useEffect(()=>{
-    if(error){
-      navigate({to:"/login",replace:true})
-    }
-  },[error])
 
   if (isLoading) {
     return <div>loading</div>;

@@ -18,46 +18,46 @@ import {
 import { Input } from "@/components/ui/input";
 import $api from "@/lib/client";
 import { paths } from "@/schema";
-import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-export const Route = createLazyFileRoute("/login/")({
-  component: () => <Login></Login>,
+export const Route = createLazyFileRoute("/register/")({
+  component: () => <Register />,
 });
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
   const form = useForm<
     NonNullable<
-      paths["/api/auth/login"]["post"]["requestBody"]
+      paths["/api/auth/register"]["post"]["requestBody"]
     >["content"]["application/json"]
   >({
     defaultValues: {
+      confirmPassword: "",
       email: "",
       password: "",
     },
   });
 
-  const mutation = $api.useMutation("post", "/api/auth/login", {
+  const mutation = $api.useMutation("post", "/api/auth/register", {
     onSuccess(data) {
       if (data.success) {
-        localStorage.setItem("token", data.data.token);
-        navigate({ to: "/", replace: true });
+        toast.success("Account created successfully");
+        navigate({ to: "/login", replace: true });
       }
     },
   });
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
-      <Form {...form}>
-        <Card className="px-10 py-5">
-          <CardHeader>
-            <CardTitle>Login</CardTitle>
-            <CardDescription>
-              Enter your email and password to login
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+    <div className="h-full flex justify-center items-center">
+      <Card className="px-20 py-10">
+        <CardHeader>
+          <CardTitle>Register</CardTitle>
+          <CardDescription>Create an account to continue</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
             <FormField
               control={form.control}
               name="email"
@@ -102,24 +102,50 @@ const Login = () => {
                 );
               }}
             ></FormField>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button
-              disabled={mutation.isPending}
-              onClick={async () => {
-                if (await form.trigger()) {
-                  mutation.mutate({ body: form.getValues() });
-                }
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              rules={{
+                required: "Confirm password is required",
+                minLength: {
+                  value: 8,
+                  message: "Password must be at least 8 characters long",
+                },
+                validate: (value) => {
+                  if (value !== form.getValues("password")) {
+                    return "Passwords do not match";
+                  }
+                },
               }}
-            >
-              Login
-            </Button>
-            <Link to="/register">
-              <Button variant={"ghost"}>Register</Button>
-            </Link>
-          </CardFooter>
-        </Card>
-      </Form>
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="password"></Input>
+                    </FormControl>
+                    <FormMessage></FormMessage>
+                  </FormItem>
+                );
+              }}
+            ></FormField>
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <Button
+            disabled={mutation.isPending}
+            onClick={async () => {
+              if (await form.trigger()) {
+                mutation.mutate({
+                  body: form.getValues(),
+                });
+              }
+            }}
+          >
+            Register
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 };
