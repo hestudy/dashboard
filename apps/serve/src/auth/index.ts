@@ -76,10 +76,13 @@ auth.openapi(register, async (c) => {
     .get();
 
   if (!!user) {
-    return c.json({
-      success: false,
-      message: "User already exists",
-    });
+    return c.json(
+      {
+        success: false,
+        message: "User already exists",
+      },
+      400
+    );
   }
 
   const passwordHash = await hash(password, {
